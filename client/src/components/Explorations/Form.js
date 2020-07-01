@@ -101,7 +101,7 @@ export default function New({initialData, showMode}) {
     }
 
     const fetchUsers = () => {
-        fetch('http://${process.env.SERVER_HOST}:8000/users')
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/users`)
             .then((res) => res.json())
             .then(res => setUsers(res))
     }
@@ -110,7 +110,7 @@ export default function New({initialData, showMode}) {
         const exploration = {
             exploration: getExploration
         }
-        fetch('http://${process.env.SERVER_HOST}:8000/addexploration', {
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/addexploration`, {
             method: 'POST',
             body: JSON.stringify(exploration),
             headers: {
@@ -131,7 +131,7 @@ export default function New({initialData, showMode}) {
         const exploration = {
             exploration: getExploration
         }
-        fetch('http://${process.env.SERVER_HOST}:8000/editexploration', {
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/editexploration`, {
             method: 'POST',
             body: JSON.stringify(exploration),
             headers: {

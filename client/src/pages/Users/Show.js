@@ -8,7 +8,7 @@ import Form from "../../components/Users/Form";
 export default function EditExploration({match}) {
     const [getUser, setUser] = useState();
     const fetchUserById = () =>{
-        fetch(`http://${process.env.SERVER_HOST}:8000/user/`+ match.params.id)
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/user/`+ match.params.id)
             .then(res => res.json())
             .then(res => setUser(res))
     }

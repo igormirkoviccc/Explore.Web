@@ -14,7 +14,7 @@ function LogIn() {
 
 
     const LogInRequest = () =>{
-        fetch(`http://${process.env.SERVER_HOST}:8000/login`, {
+        fetch(`http://${process.env.REACT_APP_REACT_APP_SERVER_HOST}:8000/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

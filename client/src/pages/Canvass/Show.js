@@ -1,28 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 
 import '../../App.css';
 import Form from "../../components/Explorations/Form";
+import AddQuestionIS from "../../components/Questions/AddQuestionIS";
 
 
 
 export default function EditExploration({match}) {
-    const [getExploration, setExploration] = useState();
+    const [getQuestion, setQuestions] = useState([]);
 
-    const fetchExplorationById = () =>{
-        fetch(`http://${process.env.SERVER_HOST}:8000/exploration/`+ match.params.id)
-            .then(res => res.json())
-            .then(res => setExploration(res))
-    }
-
-    useEffect(() =>{
-        fetchExplorationById();
-    },[])
-
-    if(!getExploration){
-        return null;
-    }
     return (
-        <Form initialData={getExploration}/>
+        <Fragment>
+            <AddQuestionIS/>
+        </Fragment>
     )
 }
 

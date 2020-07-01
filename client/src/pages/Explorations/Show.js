@@ -9,7 +9,7 @@ export default function EditExploration({match}) {
     const [getExploration, setExploration] = useState();
 
     const fetchExplorationById = () =>{
-        fetch(`http://${process.env.SERVER_HOST}:8000/exploration/`+ match.params.id)
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/exploration/`+ match.params.id)
             .then(res => res.json())
             .then(res => setExploration(res))
     }

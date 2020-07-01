@@ -65,7 +65,7 @@ export default function New({initialData, showMode}) {
         const user = {
             user: getUser
         }
-        fetch('http://${process.env.SERVER_HOST}:8000/adduser', {
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/adduser`, {
             method: 'POST',
             body: JSON.stringify(user),
             headers: {
@@ -82,7 +82,7 @@ export default function New({initialData, showMode}) {
             user: getUser
         }
 
-        fetch('http://${process.env.SERVER_HOST}:8000/edituser', {
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/edituser`, {
             method: 'POST',
             body: JSON.stringify(user),
             headers: {

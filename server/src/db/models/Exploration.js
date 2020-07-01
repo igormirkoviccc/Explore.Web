@@ -30,8 +30,13 @@ var ExplorationSchema = new mongoose.Schema({
         participants: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-        }
-        ]
+        }],
+
+
+    questions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Question',
+    }],
     },{
         timestamps: true
     }

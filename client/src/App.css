@@ -34,4 +34,8 @@ a {
   margin-left: 10px !important;
 }
 
+.MuiFormControl-root{
+  vertical-align: bottom !important;
+}
+
 
