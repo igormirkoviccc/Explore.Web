@@ -13,13 +13,13 @@ function List() {
 
 
     const fetchExplorations = () =>{
-        fetch('http://localhost:8000/explorations')
+        fetch(`http://${process.env.SERVER_HOST}:8000/explorations`)
             .then((res) => res.json())
             .then(res => setExplorations(res))
     }
 
     const deleteExploration = (id) =>{
-        fetch('http://localhost:8000/explorationsdelete/' + id)
+        fetch(`http://${process.env.SERVER_HOST}:8000/explorationsdelete/` + id)
             .then(res => res.json())
             .then(() => toast.success("Uspešno obrisano"))
             .then(() => fetchExplorations())
