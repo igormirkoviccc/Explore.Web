@@ -1,0 +1,33 @@
+# Production
+/build
+
+# Dependencies
+package-lock.json
+/node_modules
+/.pnp
+.pnp.js
+
+# Cache
+.npm
+
+# Testing
+/coverage
+
+# Misc
+.vscode
+.DS_Store
+notes
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Keys and env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

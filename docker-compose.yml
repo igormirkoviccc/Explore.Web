@@ -1,0 +1,46 @@
+version: '3'
+services:
+  ### Database
+  db:
+    image: mongo
+    volumes:
+      - ./volumes/db:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: login
+      MONGO_INITDB_ROOT_PASSWORD: password
+  ### Database viewer
+  db-viewer:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: db
+      ME_CONFIG_MONGODB_ADMINUSERNAME: login
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+  #Server
+  server:
+    build: ./server
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 8000:8000
+    links:
+      - db
+    environment:
+      PORT: 8000
+      APP_VARIANT: INTERNAL
+      PRESHARED_GATEWAY_KEY: GATEWAY_PRESHARED
+      MONGO_URL: 'mongodb://login:password@db:27017'
+    #Client
+  client:
+    build: ./client
+    stdin_open: true
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+      REACT_APP_API_URL: http://127.0.0.1:3000
