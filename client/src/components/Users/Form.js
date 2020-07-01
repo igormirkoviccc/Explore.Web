@@ -65,7 +65,7 @@ export default function New({initialData, showMode}) {
         const user = {
             user: getUser
         }
-        fetch('http://localhost:8000/adduser', {
+        fetch('http://161.35.19.105:8000/adduser', {
             method: 'POST',
             body: JSON.stringify(user),
             headers: {
@@ -82,7 +82,7 @@ export default function New({initialData, showMode}) {
             user: getUser
         }
 
-        fetch('http://localhost:8000/edituser', {
+        fetch('http://161.35.19.105:8000/edituser', {
             method: 'POST',
             body: JSON.stringify(user),
             headers: {

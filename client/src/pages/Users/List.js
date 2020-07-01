@@ -9,13 +9,13 @@ function List() {
     const [getRedirect, setRedirect] = useState();
 
     const fetchUsers = () =>{
-        fetch('http://localhost:8000/users')
+        fetch('http://161.35.19.105:8000/users')
             .then((res) => res.json())
             .then(res => setUsers(res))
     }
 
     const deleteExploration = (id) =>{
-        fetch('http://localhost:8000/usersdelete/' + id)
+        fetch('http://161.35.19.105:8000/usersdelete/' + id)
             .then(res => res.json())
             .then((res) =>{
                 if(res && res.err){

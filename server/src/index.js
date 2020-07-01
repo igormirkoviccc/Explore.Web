@@ -16,4 +16,4 @@ connection().then(() =>{
 app.use(ExplorationRoute);
 app.use(UserRoute);
 
-app.listen(8000, () => console.log(`Example app listening at http://localhost:${8000}`));
+app.listen(8000, () => console.log(`Example app listening at http://161.35.19.105:${8000}`));
