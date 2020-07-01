@@ -230,6 +230,7 @@ export default function New({initialData, showMode}) {
                     style={{marginLeft: 10, marginTop: 10}}
                     variant="contained"
                     color="primary"
+                    onClick={() => setRedirect(`/istrazivanja/${getExploration._id}/anketa/new`)}
                 >
                     Kreiraj anketu
                 </Button>

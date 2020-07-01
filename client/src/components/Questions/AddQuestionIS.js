@@ -1,5 +1,5 @@
 import React, {useState,Fragment} from 'react';
-import {InputLabel, TextField, Button} from "@material-ui/core"
+import {InputLabel, TextField, Button, Paper} from "@material-ui/core"
 import Select from 'react-select';
 import '../../App.css';
 
@@ -10,17 +10,8 @@ const QuestionType = [
     'MULTY'
 ]
 
-export default function AddQuestionIS() {
-    const [getQuestion, setQuestion] = useState({
-        type: 'TEXT',
-        possibleAnswers: [{
-            text: '',
-            stat: {
-                checked: 0
-            }
-        }]
-    });
-
+export default function AddQuestionIS(props) {
+    const [getQuestion, setQuestion] = useState(props.initialData);
     const renderTypeOptions = QuestionType.map((type) =>{
         return {
             label: type,
@@ -33,12 +24,14 @@ export default function AddQuestionIS() {
             if(getQuestion.type == 'TEXT'){
                 return (
                 <TextField
+                    style={{display: 'block'}}
                     label="Odgovor"
                     onChange={(e) => {
                         let obj = {...getQuestion};
                         obj.possibleAnswers[0].text = e.target.value;
                         setQuestion(obj);
                     }}
+                    value={getQuestion.possibleAnswers[0].text}
                 />
                 )
             }else{
@@ -54,9 +47,20 @@ export default function AddQuestionIS() {
         return(
         <Fragment>
             {getQuestion.possibleAnswers.map((answer, index) =>{
-                return (<div style={{display: 'block'}}>
+                return (
+                    <div style={{display: 'block', marginTop: 20}}>
                     <span>{`${index + 1}.`}</span>
-                    <TextField style={{marginLeft: 20}} />
+                    <TextField
+                        index={index}
+                        style={{marginLeft: 20}}
+                        value={getQuestion.possibleAnswers[index].text}
+                        onChange={(e) =>{
+                            let obj = {...getQuestion};
+                            obj.possibleAnswers[index].text = e.target.value;
+                            setQuestion(obj)
+                        }}
+
+                    />
                 </div>)
             })}
             <Button
@@ -71,13 +75,20 @@ export default function AddQuestionIS() {
                     }
                 })
                 setQuestion(obj);
-            }}>Dodaj odgovor</Button>
+            }}>
+                Dodaj odgovor
+            </Button>
         </Fragment>
         )
     }
 
+    // console.log(getQuestion);
+
     return (
+        <Paper style={{padding: 20, marginTop: 10}}>
+            <div style={{position: 'relative', color: '#3F51B5'}}>{props.index + 1}.</div>
         <Fragment>
+            <div style={{position: 'absolute', top: '10px', left: '10px'}}>{props.index + 1}.</div>
             <TextField
                 style={{marginBottom: 20}}
                 label={"Tekst pitanja"}
@@ -91,8 +102,14 @@ export default function AddQuestionIS() {
                     style={{marginBottom: 20}}
                 />
             {renderSolution()}
-
+            {/*<Button*/}
+            {/*    onClick={() =>props.onSaveQuestion(getQuestion)}*/}
+            {/*    variant="contained"*/}
+            {/*    color="primary"*/}
+            {/*    style={{display: 'block', marginTop: 50}}>Sacuvaj pitanje</Button>*/}
         </Fragment>
+        </Paper>
+
     )
 }
 
