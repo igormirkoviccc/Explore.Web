@@ -57,8 +57,6 @@ const formatGroupLabel = data => (
 
 export default function New({initialData, showMode}) {
     const [getUsers, setUsers] = useState();
-    const [getBeginDateControl, setBeginDateControl] = useState(new Date());
-    const [getEndDateControl, setEndDateControl] = useState(new Date());
     const [getRedirect, setRedirect] = useState();
 
     const classes = useStyles();
@@ -151,6 +149,7 @@ export default function New({initialData, showMode}) {
         return <Redirect push to={getRedirect}/>
     }
 
+    console.log(getExploration);
 
     return (
         <Fragment>
@@ -167,6 +166,20 @@ export default function New({initialData, showMode}) {
                     color="primary"
                     onClick={initialData ? updateExploration : postExploration}
                 >Sačuvaj</Button>
+                    <Button
+                        className={classes.actionButtons}
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            if(getExploration.questions && getExploration.questions.length){
+                                setRedirect(`/istrazivanja/${getExploration._id}/anketa/show`)
+                            }else{
+                                setRedirect(`/istrazivanja/${getExploration._id}/anketa/new`)
+                            }
+                        }}
+                    >
+                        {getExploration.questions && getExploration.questions.length ? "Uredi anketu" : "Kreiraj anketu"}
+                    </Button>
                 </Paper>
             <Grid container spacing={3}>
                 <Grid item xl={12} md={12} sm={12} lg={12}>
@@ -226,14 +239,6 @@ export default function New({initialData, showMode}) {
                         />
                     </Grid>
                 </MuiPickersUtilsProvider>
-                <Button
-                    style={{marginLeft: 10, marginTop: 10}}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => setRedirect(`/istrazivanja/${getExploration._id}/anketa/new`)}
-                >
-                    Kreiraj anketu
-                </Button>
             </Grid>
         </Fragment>
 

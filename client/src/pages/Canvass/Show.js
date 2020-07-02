@@ -2,6 +2,8 @@ import React, {useState, Fragment} from 'react';
 import {Button} from "@material-ui/core"
 import '../../App.css';
 import AddQuestionIS from "../../components/Questions/AddQuestionIS";
+import toast from "../../utils/toast"
+import {useLocation} from 'react-router-dom'
 
 
 
@@ -12,7 +14,7 @@ export default function CanvasEdit({match}) {
         let array = [...getQuestions];
         array[array.length - 1] = question;
         setQuestions(array);
-    }
+    };
 
     const addQuestion = () =>{
         let array = [...getQuestions];
@@ -24,7 +26,7 @@ export default function CanvasEdit({match}) {
             }]
         });
         setQuestions(array);
-    }
+    };
 
     const renderQuestions = () =>{
         return getQuestions.map((question, index) =>{
@@ -34,12 +36,12 @@ export default function CanvasEdit({match}) {
                 onSaveQuestion={saveQuestion}
                 initialData={question}/>
         })
-    }
+    };
 
     const saveCanvas = () =>{
         const canvas = {
             questions: getQuestions
-        }
+        };
 
         fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/add_canvas/` +match.params.id,{
             method: 'POST',
@@ -49,9 +51,9 @@ export default function CanvasEdit({match}) {
             }
         })
             .then((res) => res.json())
-            .then((res) => console.log(res))
+            .then((res) => toast.success("Uspešno dodata pitanja"))
 
-    }
+    };
 
     return (
         <Fragment>

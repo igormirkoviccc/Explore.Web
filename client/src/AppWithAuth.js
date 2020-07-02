@@ -27,6 +27,7 @@ function AppWithAuth() {
                        <Route exact path="/istrazivanja/:id/edit" component={EditExploration} />
                        <Route exact path="/istrazivanja/:id/show" component={ShowExploration} />
                        <Route exact path="/istrazivanja/:id/anketa/new" component={ShowCanvass} />
+                       <Route exact path="/istrazivanja/:id/anketa/show" component={ShowCanvass} />
                        <Route exact path="/korisnici/" component={ListUsers} />
                        <Route exact path="/korisnici/new" component={NewUser} />
                        <Route exact path="/korisnici/:id/show" component={ShowUser} />

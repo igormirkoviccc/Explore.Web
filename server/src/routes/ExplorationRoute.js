@@ -60,14 +60,13 @@ ExplorationRoute.get('/explorationsdelete/:id', async (req,res) =>{
 ExplorationRoute.post('/add_canvas/:id', async (req,res) =>{
     const exploration = await Exploration.findById( req.params.id );
     const questions = req.body.questions;
-    const arr = []
     await questions.forEach(async (question) =>{
-        const questionM = await new Question({...question});
+        const questionM = new Question({...question});
         const q = await questionM.save();
         await exploration.update({$push:{questions : q}});
-    })
+    });
 
     if(exploration) res.send(exploration)
-})
+});
 
 module.exports = ExplorationRoute;
