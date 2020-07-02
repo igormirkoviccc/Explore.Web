@@ -1,26 +1,17 @@
 const mongoose = require('mongoose');
-import QuestionTypeEnum from '../../enum/questiontype';
+const QuestionTypeEnum = require('../../enum/questiontype');
 
 
 
-var Questions = new mongoose.Schema({
-        stat: {
-            correct: Number,
-            notCorrect: Number,
-        },
+var QuestionSchema = new mongoose.Schema({
         type:{
             type:QuestionTypeEnum
         },
         text:String,
         possibleAnswers:[{
-            text:{
-                type:String,
-                required: true
-            },
-            stat:{
-                checked: Number,
-                required: true
-            }
+            id: { type: mongoose.Schema.Types.ObjectId },
+            text:{ type:String },
+            checked: { type: Number}
         }]
     },{
         timestamps: true
@@ -36,6 +27,6 @@ var Questions = new mongoose.Schema({
 //     }
 // })
 
-const Questions = mongoose.model('Questions', Questions);
+const Question = mongoose.model('Question', QuestionSchema);
 
-module.exports = Questions
+module.exports = Question

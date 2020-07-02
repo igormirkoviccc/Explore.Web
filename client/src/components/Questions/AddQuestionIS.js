@@ -12,6 +12,7 @@ const QuestionType = [
 
 export default function AddQuestionIS(props) {
     const [getQuestion, setQuestion] = useState(props.initialData);
+
     const renderTypeOptions = QuestionType.map((type) =>{
         return {
             label: type,
@@ -20,27 +21,11 @@ export default function AddQuestionIS(props) {
     })
 
     const renderSolution = () =>{
-        if(getQuestion.type){
-            if(getQuestion.type == 'TEXT'){
-                return (
-                <TextField
-                    style={{display: 'block'}}
-                    label="Odgovor"
-                    onChange={(e) => {
-                        let obj = {...getQuestion};
-                        obj.possibleAnswers[0].text = e.target.value;
-                        setQuestion(obj);
-                    }}
-                    value={getQuestion.possibleAnswers[0].text}
-                />
-                )
-            }else{
-                return renderAnswers();
-            }
-        }else{
+        if(!getQuestion.type || getQuestion.type === 'TEXT'){
             return null
+        }else{
+            return renderAnswers();
         }
-
     }
 
     const renderAnswers = () =>{
@@ -58,6 +43,7 @@ export default function AddQuestionIS(props) {
                             let obj = {...getQuestion};
                             obj.possibleAnswers[index].text = e.target.value;
                             setQuestion(obj)
+                            props.onSaveQuestion(obj);
                         }}
 
                     />
@@ -70,9 +56,7 @@ export default function AddQuestionIS(props) {
                 onClick={() => {
                 let obj = {...getQuestion};
                 obj.possibleAnswers.push({
-                    text: '', stat: {
-                        checked: 0
-                    }
+                    text: '', checked: 0
                 })
                 setQuestion(obj);
             }}>
@@ -81,8 +65,6 @@ export default function AddQuestionIS(props) {
         </Fragment>
         )
     }
-
-    // console.log(getQuestion);
 
     return (
         <Paper style={{padding: 20, marginTop: 10}}>
@@ -98,15 +80,12 @@ export default function AddQuestionIS(props) {
                 <Select
                     options={renderTypeOptions}
                     value={renderTypeOptions.find((type) => getQuestion.type == type.value)}
-                    onChange={(input) => setQuestion({...getQuestion, type: input.value})}
+                    onChange={(input) => {
+                        setQuestion({...getQuestion, type: input.value})
+                    }}
                     style={{marginBottom: 20}}
                 />
             {renderSolution()}
-            {/*<Button*/}
-            {/*    onClick={() =>props.onSaveQuestion(getQuestion)}*/}
-            {/*    variant="contained"*/}
-            {/*    color="primary"*/}
-            {/*    style={{display: 'block', marginTop: 50}}>Sacuvaj pitanje</Button>*/}
         </Fragment>
         </Paper>
 

@@ -1,9 +1,13 @@
-export const TEXT = 'TEXT';
-export const MULTY = 'MULTY';
-export const SINGLE = 'SINGLE';
+const TEXT = 'TEXT';
+const MULTY = 'MULTY';
+const SINGLE = 'SINGLE';
 
-export default [
+module.exports.TEXT = TEXT;
+module.exports.MULTY = MULTY;
+module.exports.SINGLE = SINGLE;
+
+module.exports = {
     TEXT,
     MULTY,
     SINGLE
-];
+};

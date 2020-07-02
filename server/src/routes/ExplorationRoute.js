@@ -3,6 +3,7 @@ var express = require('express')
 const ExplorationRoute = express.Router()
 const Exploration = require('../db/models/Exploration')
 const User = require('../db/models/User')
+const Question = require('../db/models/Questions')
 
 
 ExplorationRoute.get('/explorations', (req, res) =>{
@@ -54,6 +55,19 @@ ExplorationRoute.get('/explorationsdelete/:id', async (req,res) =>{
         }
         res.send(docs);
     })
+})
+
+ExplorationRoute.post('/add_canvas/:id', async (req,res) =>{
+    const exploration = await Exploration.findById( req.params.id );
+    const questions = req.body.questions;
+    const arr = []
+    await questions.forEach(async (question) =>{
+        const questionM = await new Question({...question});
+        const q = await questionM.save();
+        await exploration.update({$push:{questions : q}});
+    })
+
+    if(exploration) res.send(exploration)
 })
 
 module.exports = ExplorationRoute;

@@ -13,7 +13,6 @@ export default function CanvasEdit({match}) {
         array[array.length - 1] = question;
         setQuestions(array);
     }
-    console.log(getQuestions);
 
     const addQuestion = () =>{
         let array = [...getQuestions];
@@ -21,9 +20,7 @@ export default function CanvasEdit({match}) {
             type: 'TEXT',
             possibleAnswers: [{
                 text: '',
-                stat: {
-                    checked: 0
-                }
+                checked: 0
             }]
         });
         setQuestions(array);
@@ -39,6 +36,23 @@ export default function CanvasEdit({match}) {
         })
     }
 
+    const saveCanvas = () =>{
+        const canvas = {
+            questions: getQuestions
+        }
+
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/add_canvas/` +match.params.id,{
+            method: 'POST',
+            body: JSON.stringify(canvas),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((res) => res.json())
+            .then((res) => console.log(res))
+
+    }
+
     return (
         <Fragment>
             {renderQuestions()}
@@ -47,6 +61,12 @@ export default function CanvasEdit({match}) {
                 variant="contained"
                 color="primary"
                 style={{display: 'block', marginTop: 50}}>Dodaj pitanje</Button>
+            <Button
+                onClick={saveCanvas}
+                variant="contained"
+                color="primary"
+                style={{display: 'block', marginTop: 50}}>Sačuvaj anektu</Button>
+
         </Fragment>
     )
 }
