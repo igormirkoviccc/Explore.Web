@@ -8,7 +8,7 @@ const QuestionType = [
     'TEXT',
     'SINGLE',
     'MULTY'
-]
+];
 
 export default function AddQuestionIS(props) {
     const [getQuestion, setQuestion] = useState(props.initialData);
@@ -18,7 +18,7 @@ export default function AddQuestionIS(props) {
             label: type,
             value: type
         }
-    })
+    });
 
     const renderSolution = () =>{
         if(!getQuestion.type || getQuestion.type === 'TEXT'){
@@ -26,7 +26,7 @@ export default function AddQuestionIS(props) {
         }else{
             return renderAnswers();
         }
-    }
+    };
 
     const renderAnswers = () =>{
         return(
@@ -42,7 +42,7 @@ export default function AddQuestionIS(props) {
                         onChange={(e) =>{
                             let obj = {...getQuestion};
                             obj.possibleAnswers[index].text = e.target.value;
-                            setQuestion(obj)
+                            setQuestion(obj);
                             props.onSaveQuestion(obj);
                         }}
 
@@ -57,14 +57,14 @@ export default function AddQuestionIS(props) {
                 let obj = {...getQuestion};
                 obj.possibleAnswers.push({
                     text: '', checked: 0
-                })
+                });
                 setQuestion(obj);
             }}>
                 Dodaj odgovor
             </Button>
         </Fragment>
         )
-    }
+    };
 
     return (
         <Paper style={{padding: 20, marginTop: 10}}>

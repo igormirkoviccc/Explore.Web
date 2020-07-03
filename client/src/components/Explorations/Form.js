@@ -145,11 +145,11 @@ export default function New({initialData, showMode}) {
     }, [])
 
 
+
     if(getRedirect){
         return <Redirect push to={getRedirect}/>
     }
 
-    console.log(getExploration);
 
     return (
         <Fragment>

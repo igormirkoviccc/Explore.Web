@@ -11,11 +11,12 @@ import ShowExploration from  './pages/Explorations/Show';
 import ListUsers from './pages/Users/List'
 import NewUser from './pages/Users/New'
 import ShowUser from './pages/Users/Show'
+import NewCanvass from './pages/Canvass/New';
 import ShowCanvass from './pages/Canvass/Show';
 import DrawerIS from "./components/DrawerIS";
 
 
-function AppWithAuth() {
+export default function AppWithAuth() {
     const {isAuth, setAuth} = Context();
     return (
             <div className='App'>
@@ -26,7 +27,7 @@ function AppWithAuth() {
                        <Route exact path="/istrazivanja/new" component={NewExploration} />
                        <Route exact path="/istrazivanja/:id/edit" component={EditExploration} />
                        <Route exact path="/istrazivanja/:id/show" component={ShowExploration} />
-                       <Route exact path="/istrazivanja/:id/anketa/new" component={ShowCanvass} />
+                       <Route exact path="/istrazivanja/:id/anketa/new" component={NewCanvass} />
                        <Route exact path="/istrazivanja/:id/anketa/show" component={ShowCanvass} />
                        <Route exact path="/korisnici/" component={ListUsers} />
                        <Route exact path="/korisnici/new" component={NewUser} />
@@ -39,4 +40,3 @@ function AppWithAuth() {
     )
 }
 
-export default AppWithAuth;
