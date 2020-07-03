@@ -58,7 +58,7 @@ const formatGroupLabel = data => (
 export default function New({initialData, showMode}) {
     const [getUsers, setUsers] = useState();
     const [getRedirect, setRedirect] = useState();
-
+    const [getVideos, setVideos] = useState([]);
     const classes = useStyles();
 
     const [getExploration, setExploration] = useState(
@@ -143,6 +143,49 @@ export default function New({initialData, showMode}) {
     useEffect(() => {
         fetchUsers();
     }, [])
+
+    const renderVideosAdding = () =>{
+        return getVideos.map((video, index) =>{
+            return <div style={{display: "block"}}>
+                <TextField
+                label={"Zakači video"}
+                value={video}
+                onChange={(e) =>{
+                    let videos = [...getVideos];
+                    videos[index] = e.target.value;
+                    setVideos(videos);
+                }
+                }
+            />
+            </div>
+        })
+    }
+
+    const addVideos = () =>{
+        const videos = {
+            videos: getVideos
+        }
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/editexploration_videos/` + initialData._id, {
+            method: 'POST',
+            body: JSON.stringify(videos),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(() => toast.success("Uspešno sačuvano."))
+            .then(() => setRedirect('/istrazivanja'))
+    }
+
+    const renderVideos = () =>{
+        if(getExploration && getExploration.videos){
+            return getExploration.videos.map((video) =>{
+                console.log(video)
+                return <iframe width="420" height="315"
+                               src={video}>
+                </iframe>
+            })
+        }
+    }
 
 
 
@@ -238,7 +281,30 @@ export default function New({initialData, showMode}) {
                             }}
                         />
                     </Grid>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <div>
+                            {renderVideos()}
+                        </div>
+                        {renderVideosAdding()}
+                        <Button
+                            style={{marginTop: 20}}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                let videos = [...getVideos];
+                                videos.push('');
+                                setVideos(videos);
+                            }}
+                        >Dodaj video</Button>
+                        <Button
+                            style={{marginTop: 20}}
+                            variant="contained"
+                            color="primary"
+                            onClick={addVideos}
+                        >Sačuvaj video zapise</Button>
+                    </div>
                 </MuiPickersUtilsProvider>
+
             </Grid>
         </Fragment>
 

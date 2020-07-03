@@ -35,6 +35,9 @@ var ExplorationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Question',
     }],
+    videos: [{
+            type: String
+    }]
     },{
         timestamps: true
     }

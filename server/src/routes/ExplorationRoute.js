@@ -13,7 +13,7 @@ ExplorationRoute.get('/explorations', (req, res) =>{
 })
 
 ExplorationRoute.get('/exploration/:id', (req, res) =>{
-    Exploration.findById(req.params.id).populate('coordinator').populate('participants').exec(function (err, docs) {
+    Exploration.findById(req.params.id).populate('coordinator').populate('participants').populate('questions').exec(function (err, docs) {
         res.send(docs)
     })
 })
@@ -66,6 +66,17 @@ ExplorationRoute.post('/add_canvas/:id', async (req,res) =>{
         await exploration.update({$push:{questions : q}});
     });
 
+    if(exploration) res.send(exploration)
+});
+
+//editexploration_videos
+
+ExplorationRoute.post('/editexploration_videos/:id', async (req,res) =>{
+    const exploration = await Exploration.findById( req.params.id );
+    const videos = req.body.videos;
+    await videos.forEach(async (video) =>{
+        await exploration.update({$push:{videos : video}});
+    });
     if(exploration) res.send(exploration)
 });
 

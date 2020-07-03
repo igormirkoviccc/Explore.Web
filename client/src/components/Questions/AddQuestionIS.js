@@ -75,6 +75,7 @@ export default function AddQuestionIS(props) {
                 style={{marginBottom: 20}}
                 label={"Tekst pitanja"}
                 onChange={(e) => setQuestion({...getQuestion, text: e.target.value})}
+                value={getQuestion.text}
             />
             <InputLabel>Tip pitanja</InputLabel>
                 <Select

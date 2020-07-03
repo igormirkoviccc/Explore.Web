@@ -4,9 +4,10 @@ import '../../App.css';
 import AddQuestionIS from "../../components/Questions/AddQuestionIS";
 import toast from "../../utils/toast"
 
-export default function Form({match}) {
-    const [getQuestions, setQuestions] = useState([]);
-
+export default function Form({initialData, id}) {
+    console.log(initialData);
+    const [getQuestions, setQuestions] = useState(initialData ? initialData : []);
+    console.log(getQuestions);
     const saveQuestion = (question) =>{
         let array = [...getQuestions];
         array[array.length - 1] = question;
@@ -40,7 +41,7 @@ export default function Form({match}) {
             questions: getQuestions
         };
 
-        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/add_canvas/` +match.params.id,{
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/add_canvas/` +id,{
             method: 'POST',
             body: JSON.stringify(canvas),
             headers: {
