@@ -11,6 +11,7 @@ import {Redirect} from "react-router-dom"
 
 import '../../App.css';
 import toast from "../../utils/toast"
+import * as fs from 'fs';
 
 
 import ActionContainer from "../../components/ActionContainerIS";
@@ -59,6 +60,7 @@ export default function New({initialData, showMode}) {
     const [getUsers, setUsers] = useState();
     const [getRedirect, setRedirect] = useState();
     const [getVideos, setVideos] = useState([]);
+    const [getAPIInput, setAPIInput] = useState();
     const classes = useStyles();
 
     const [getExploration, setExploration] = useState(
@@ -162,24 +164,37 @@ export default function New({initialData, showMode}) {
     }
 
     const addVideos = () =>{
-        const videos = {
-            videos: getVideos
-        }
-        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/editexploration_videos/` + initialData._id, {
-            method: 'POST',
-            body: JSON.stringify(videos),
-            headers: {
-                'Content-Type': 'application/json'
+        let valid = true;
+
+        for(let i = 0; i < getVideos.length; i++){
+            console.log(getVideos[i]);
+            if(!getVideos[i] || !getVideos[i].includes('embed')){
+                valid = false;
             }
-        })
-            .then(() => toast.success("Uspešno sačuvano."))
-            .then(() => setRedirect('/istrazivanja'))
+        }
+
+        if(valid){
+            const videos = {
+                videos: getVideos
+            }
+
+            fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/editexploration_videos/` + initialData._id, {
+                method: 'POST',
+                body: JSON.stringify(videos),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => toast.success("Uspešno sačuvano."))
+                .then(() => setRedirect('/istrazivanja'))
+        }else{
+            toast.error("Nešto nije u redu sa linkom.")
+        }
     }
 
     const renderVideos = () =>{
         if(getExploration && getExploration.videos){
             return getExploration.videos.map((video) =>{
-                console.log(video)
                 return <iframe width="420" height="315"
                                src={video}>
                 </iframe>
@@ -187,12 +202,38 @@ export default function New({initialData, showMode}) {
         }
     }
 
+    const saveAPIData = () =>{
+        fetch(`${getAPIInput}`, {
+            mode: 'no-cors', // no-cors, *cors, same-origin
+        })
+            .then(res => res.json())
+            .then(res => exportAsJSON(res))
+            .catch((err) => toast.error(err))
+    }
 
+    const exportAsJSON = (json) =>{
+        let data = {
+            json
+        }
+        console.log(data, "data");
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/exploration_file`, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            }})
+                .then((res) => res.blob())
+                .then((res) =>{
+                    console.log(res);
+                    var file = window.URL.createObjectURL(res);
+                    window.location.assign(file);
+                }
+        )
+    }
 
     if(getRedirect){
         return <Redirect push to={getRedirect}/>
     }
-
 
     return (
         <Fragment>
@@ -304,8 +345,23 @@ export default function New({initialData, showMode}) {
                         >Sačuvaj video zapise</Button>
                     </div>
                 </MuiPickersUtilsProvider>
-
             </Grid>
+            <div style={{marginBottom: 100}}>
+                <TextField
+                    label={"API"}
+                    value={getAPIInput}
+                    onChange={(e) =>{
+                        setAPIInput(e.target.value)
+                    }}
+
+                />
+                <Button
+                    style={{marginTop: 50, marginLeft: 50}}
+                    onClick={saveAPIData}
+                    variant="contained"
+                    color="primary"
+                >Sačuvaj podatke</Button>
+            </div>
         </Fragment>
 
     )

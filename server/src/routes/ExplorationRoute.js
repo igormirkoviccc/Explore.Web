@@ -1,5 +1,5 @@
 var express = require('express')
-
+const fs = require("fs");
 const ExplorationRoute = express.Router()
 const Exploration = require('../db/models/Exploration')
 const User = require('../db/models/User')
@@ -78,6 +78,17 @@ ExplorationRoute.post('/editexploration_videos/:id', async (req,res) =>{
         await exploration.update({$push:{videos : video}});
     });
     if(exploration) res.send(exploration)
+});
+
+//exploration_file
+
+ExplorationRoute.post('/exploration_file', async (req,res) =>{
+    const text = "test.json";
+    console.log(req.body.json);
+    await fs.writeFile(text,JSON.stringify(req.body.json),function (err, fd) {
+        if (err) return console.log(err);
+        res.download(text);
+    });
 });
 
 module.exports = ExplorationRoute;
