@@ -1,12 +1,14 @@
 var express = require('express')
 const fs = require("fs");
+const Auth = require('../middleware/auth');
+
 const ExplorationRoute = express.Router()
 const Exploration = require('../db/models/Exploration')
 const User = require('../db/models/User')
 const Question = require('../db/models/Questions')
 
 
-ExplorationRoute.get('/explorations', (req, res) =>{
+ExplorationRoute.get('/explorations', Auth.verifyUserToken, (req, res) =>{
     Exploration.find({}).populate('coordinator').populate('participants').exec(function (err, docs) {
         res.send(docs)
     })

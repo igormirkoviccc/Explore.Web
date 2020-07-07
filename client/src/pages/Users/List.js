@@ -9,19 +9,40 @@ function List() {
     const [getRedirect, setRedirect] = useState();
 
     const fetchUsers = () =>{
-        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/users`)
-            .then((res) => res.json())
-            .then(res => setUsers(res))
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/users`, {
+            headers: {
+                'x-access-token': localStorage.getItem('auth_token')
+            }
+        })
+            .then(async (res) => {
+                if(res.status != 200){
+                    res = await res.json();
+                    toast.error(res.message)
+                }else{
+                    res = await res.json();
+                    setUsers(res);
+                }
+            })
     }
 
     const deleteExploration = (id) =>{
-        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/usersdelete/` + id)
-            .then(res => res.json())
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/usersdelete/` + id, {
+            headers: {
+                'x-access-token': localStorage.getItem('auth_token')
+            }
+        })
+            .then(async (res) => {
+                if(res.status != 200){
+                    res = await res.json();
+                    toast.error(res.message)
+                    return;
+                }else{
+                    return res.json();
+                }
+            })
             .then((res) =>{
                 if(res && res.err){
                     toast.error("Korisnik je koordinator na nekom istraživanju. Ne može biti obrisan.")
-                }else{
-                    toast.success("Uspešno obrisano")
                 }
             })
             .then(() => fetchUsers())

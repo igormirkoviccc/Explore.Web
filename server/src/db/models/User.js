@@ -49,7 +49,7 @@ var UserSchema = new mongoose.Schema({
 );
 
 UserSchema.methods.generateAuthToken = async function() {
-    return jwt.sign({email: this.email}, 'marina');
+    return jwt.sign({email: this.email, role: this.role}, 'secret123123');
 }
 
 UserSchema.statics.findByCredentials = async (email, password) =>{

@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import {Context} from './context/Auth';
 import { Switch, Route } from 'react-router-dom';
+import toast from './utils/toast';
 
 import Login from './pages/Login'
 import ListExplorations from './pages/Explorations/List';
@@ -18,6 +19,18 @@ import DrawerIS from "./components/DrawerIS";
 
 export default function AppWithAuth() {
     const {isAuth, setAuth} = Context();
+    const role = localStorage.getItem('role');
+
+    const checkAdmin = (Component) =>{
+        if(role == 'ADMIN'){
+            return <Component/>;
+        }else{
+            toast.error('Not authorized. Only admins.');
+            return null;
+        }
+    }
+
+
     return (
             <div className='App'>
                 {isAuth ?
@@ -30,7 +43,7 @@ export default function AppWithAuth() {
                        <Route exact path="/istrazivanja/:id/anketa/new" component={NewCanvass} />
                        <Route exact path="/istrazivanja/:id/anketa/show" component={ShowCanvass} />
                        <Route exact path="/korisnici/" component={ListUsers} />
-                       <Route exact path="/korisnici/new" component={NewUser} />
+                       <Route exact path="/korisnici/new" component={() => checkAdmin(NewUser)} />
                        <Route exact path="/korisnici/:id/show" component={ShowUser} />
                         </DrawerIS>
                     </Switch>

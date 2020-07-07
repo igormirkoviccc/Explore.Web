@@ -101,9 +101,20 @@ export default function New({initialData, showMode}) {
     }
 
     const fetchUsers = () => {
-        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/users`)
-            .then((res) => res.json())
-            .then(res => setUsers(res))
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/users`, {
+            headers: {
+                'x-access-token': localStorage.getItem('auth_token')
+            }
+        })
+            .then(async (res) => {
+                if(res.status != 200){
+                    res = await res.json();
+                    toast.error(res.message)
+                }else{
+                    res = await res.json();
+                    setUsers(res);
+                }
+            })
     }
 
     const postExploration = () => {

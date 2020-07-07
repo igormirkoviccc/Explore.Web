@@ -11,11 +11,20 @@ function List() {
     const [getExplorations, setExplorations] = useState();
     const [getRedirect, setRedirect] = useState();
 
-
     const fetchExplorations = () =>{
-        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/explorations`)
-            .then((res) => res.json())
-            .then(res => setExplorations(res))
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/explorations`, {
+            headers: {
+                'x-access-token': localStorage.getItem('auth_token')
+            }})
+            .then(async (res) => {
+                if(res.status != 200){
+                    res = await res.json();
+                    toast.error(res.message)
+                }else{
+                    res = await res.json();
+                    setExplorations(res);
+                }
+            })
     }
 
     const deleteExploration = (id) =>{

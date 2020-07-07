@@ -28,7 +28,7 @@ function LogIn() {
             .then(res => {
                 if(res.token){
                     setRedirect(`/istrazivanja/`);
-                    setAuth(res.token, res.id);
+                    setAuth(res.token, res.id, res.role);
                 }else{
                     if(res.error){
                         toast.error(res.error);

@@ -95,7 +95,7 @@ export default function New({initialData, showMode}) {
 
     const roleOptions = [
         {value: 'ADMIN', label: 'ADMIN'},
-        {value: 'MODERATOR', label: 'MODERATOR'},
+        {value: 'ISTRAZIVAC', label: 'ISTRAZIVAC'},
         {value: 'CLAN', label: 'CLAN'}
     ]
 
