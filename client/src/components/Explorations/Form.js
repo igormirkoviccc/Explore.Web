@@ -203,33 +203,45 @@ export default function New({initialData, showMode}) {
     }
 
     const saveAPIData = () =>{
-        fetch(`${getAPIInput}`, {
-            mode: 'no-cors', // no-cors, *cors, same-origin
-        })
+        console.log('helloooo')
+        fetch(`${getAPIInput}`)
             .then(res => res.json())
+            // .then(res => console.log(res))
             .then(res => exportAsJSON(res))
             .catch((err) => toast.error(err))
     }
 
     const exportAsJSON = (json) =>{
+        console.log(json)
         let data = {
             json
         }
-        console.log(data, "data");
         fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/exploration_file`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
             }})
-                .then((res) => res.blob())
-                .then((res) =>{
-                    console.log(res);
-                    var file = window.URL.createObjectURL(res);
-                    window.location.assign(file);
-                }
-        )
+                .then((res) => res.json())
+                .then((res) => {
+                    downloadData(res);
+                })
     }
+
+    const downloadData = (data) => {
+        let linkDom = document.createElement("a");
+        document.body.appendChild(linkDom);
+        linkDom.style = "display: none";
+        let json = JSON.stringify(data),
+            blob = new Blob([json], {type: "octet/stream"}),
+            url = window.URL.createObjectURL(blob);
+            linkDom.href = url;
+            linkDom.download = 'data.json';
+            linkDom.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+
 
     if(getRedirect){
         return <Redirect push to={getRedirect}/>

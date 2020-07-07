@@ -84,6 +84,7 @@ ExplorationRoute.post('/editexploration_videos/:id', async (req,res) =>{
 
 ExplorationRoute.post('/exploration_file', async (req,res) =>{
     const text = "test.json";
+    console.log(req.body)
     console.log(req.body.json);
     await fs.writeFile(text,JSON.stringify(req.body.json),function (err, fd) {
         if (err) return console.log(err);
