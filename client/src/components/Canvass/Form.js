@@ -5,10 +5,7 @@ import AddQuestionIS from "../../components/Questions/AddQuestionIS";
 import toast from "../../utils/toast"
 
 export default function Form({initialData, id}) {
-    console.log(initialData);
-    console.log(id);
     const [getQuestions, setQuestions] = useState(initialData ? initialData : []);
-    console.log(getQuestions);
     const saveQuestion = (question) =>{
         let array = [...getQuestions];
         array[array.length - 1] = question;

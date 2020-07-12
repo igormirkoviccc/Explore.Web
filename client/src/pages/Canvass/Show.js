@@ -13,7 +13,6 @@ export default function CanvasShow({match}) {
         fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/exploration/`+ match.params.id)
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 if(res.questions){
                     setQuestions(res.questions)
                 }

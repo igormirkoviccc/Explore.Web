@@ -21,7 +21,6 @@ export default function CanvasNew({match}) {
         return null;
     }
 
-    console.log(getExploration);
     return (
         <Session initialData={getExploration.questions}/>
     )
