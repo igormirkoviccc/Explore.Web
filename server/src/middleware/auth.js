@@ -25,7 +25,16 @@ const Auth = {
         }else{
             next();
         }
+    },
+
+    async verifyModerator(req, res, next){
+        if(!req.decoded.role || (req.decoded.role != 'ADMIN' && req.decoded.role != 'ISTRAZIVAC')){
+            return res.status(400).json({'message': 'Not authorized. Only moderator or admin.'});
+        }else{
+            next();
+        }
     }
+
 }
 
 module.exports = Auth;

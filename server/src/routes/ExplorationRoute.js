@@ -8,10 +8,19 @@ const User = require('../db/models/User')
 const Question = require('../db/models/Questions')
 
 
-ExplorationRoute.get('/explorations', Auth.verifyUserToken, (req, res) =>{
-    Exploration.find({}).populate('coordinator').populate('participants').exec(function (err, docs) {
-        res.send(docs)
-    })
+ExplorationRoute.get('/explorations', Auth.verifyUserToken, async (req, res) =>{
+    if(req.decoded.role != 'ADMIN'){
+        const user = await User.findOne({email: req.decoded.email});
+        Exploration.find({participants: user._id}).populate('coordinator').populate('participants').exec(function (err, docs) {
+            console.log(docs);
+            res.send(docs)
+        })
+    }else{
+        Exploration.find({}).populate('coordinator').populate('participants').exec(function (err, docs) {
+            res.send(docs)
+        })
+    }
+
 })
 
 ExplorationRoute.get('/exploration/:id', (req, res) =>{
@@ -31,7 +40,7 @@ ExplorationRoute.post('/addexploration', async (req, res) =>{
     })
 })
 
-ExplorationRoute.post('/editexploration', async (req, res) =>{
+ExplorationRoute.post('/editexploration', Auth.verifyUserToken, Auth.verifyModerator, async (req, res) =>{
      await Exploration.findOneAndUpdate({_id: req.body.exploration._id}, req.body.exploration, {new: true}, (err,doc) =>{
          if(err){
              res.send(err);

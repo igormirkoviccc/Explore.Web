@@ -61,6 +61,7 @@ export default function New({initialData, showMode}) {
     const [getRedirect, setRedirect] = useState();
     const [getVideos, setVideos] = useState([]);
     const [getAPIInput, setAPIInput] = useState();
+    const [getAuth, setAuth] = useState(localStorage.getItem('role') === 'CLAN');
     const classes = useStyles();
 
     const [getExploration, setExploration] = useState(
@@ -146,11 +147,20 @@ export default function New({initialData, showMode}) {
             method: 'POST',
             body: JSON.stringify(exploration),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-access-token': localStorage.getItem('auth_token')
             }
         })
-            .then(() => toast.success("Uspešno sačuvano."))
-            .then(() => setRedirect('/istrazivanja'))
+            .then(async (res) => {
+                if(res.status != 200){
+                    res = await res.json();
+                    toast.error(res.message)
+                }else{
+                    res = await res.json();
+                    toast.success("Uspešno sačuvano.");
+                    setRedirect('/istrazivanja')
+                }
+            })
     }
 
     useEffect(() => {
@@ -178,7 +188,6 @@ export default function New({initialData, showMode}) {
         let valid = true;
 
         for(let i = 0; i < getVideos.length; i++){
-            console.log(getVideos[i]);
             if(!getVideos[i] || !getVideos[i].includes('embed')){
                 valid = false;
             }
@@ -214,8 +223,11 @@ export default function New({initialData, showMode}) {
     }
 
     const saveAPIData = () =>{
-        console.log('helloooo')
-        fetch(`${getAPIInput}`)
+        fetch(`${getAPIInput}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('auth_token')
+            }
+        })
             .then(res => res.json())
             // .then(res => console.log(res))
             .then(res => exportAsJSON(res))
@@ -268,12 +280,14 @@ export default function New({initialData, showMode}) {
                 >Nazad
                 </Button>
                 <Button
+                    disabled={getAuth}
                     className={classes.actionButtons}
                     variant="contained"
                     color="primary"
                     onClick={initialData ? updateExploration : postExploration}
                 >Sačuvaj</Button>
                     <Button
+                        disabled={getAuth}
                         className={classes.actionButtons}
                         variant="contained"
                         color="primary"
@@ -287,10 +301,22 @@ export default function New({initialData, showMode}) {
                     >
                         {getExploration.questions && getExploration.questions.length ? "Uredi anketu" : "Kreiraj anketu"}
                     </Button>
+                    <Button
+                        disabled={!getAuth}
+                        className={classes.actionButtons}
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>{
+                            setRedirect(`/istrazivanja/${getExploration._id}/anketa/session`)
+                        }}
+                    >
+                      Popuni anketu
+                    </Button>
                 </Paper>
             <Grid container spacing={3}>
                 <Grid item xl={12} md={12} sm={12} lg={12}>
                     <TextField
+                        disabled={getAuth}
                         label={"Naziv"}
                         onChange={(e) => setExploration({...getExploration, name: e.target.value})}
                         value={getExploration.name}
@@ -299,6 +325,7 @@ export default function New({initialData, showMode}) {
                 <Grid item xl={12} md={12} sm={12} lg={12}>
                     <InputLabel>Kordinator</InputLabel>
                     <Select
+                        isDisabled={getAuth}
                         formatGroupLabel={formatGroupLabel}
                         components={animatedComponents}
                         options={makeOptionsForUsers}
@@ -309,6 +336,7 @@ export default function New({initialData, showMode}) {
                 <Grid item xl={12} md={12} sm={12} lg={12}>
                     <InputLabel>Učesnici</InputLabel>
                     <Select
+                        isDisabled={getAuth}
                         formatGroupLabel={formatGroupLabel}
                         components={animatedComponents}
                         options={makeOptionsForUsers}
@@ -321,7 +349,7 @@ export default function New({initialData, showMode}) {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <Grid item xl={12} md={12} sm={12} lg={12}>
                         <KeyboardDatePicker
-                            disabled={!!showMode}
+                            disabled={getAuth}
                             fullWidth
                             label="Begin date"
                             allowKeyboardControl={true}
@@ -334,7 +362,7 @@ export default function New({initialData, showMode}) {
                     </Grid>
                     <Grid item xl={12} md={12} sm={12} lg={12}>
                         <KeyboardDatePicker
-                            disabled={!!showMode}
+                            disabled={getAuth}
                             fullWidth
                             label="End date"
                             allowKeyboardControl={true}
@@ -376,7 +404,6 @@ export default function New({initialData, showMode}) {
                     onChange={(e) =>{
                         setAPIInput(e.target.value)
                     }}
-
                 />
                 <Button
                     style={{marginTop: 50, marginLeft: 50}}

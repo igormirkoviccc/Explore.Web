@@ -6,7 +6,7 @@ import Form from "../../components/Canvass/Form";
 
 export default function CanvasNew({match}) {
     return (
-        <Form/>
+        <Form id={match.params.id}/>
     )
 }
 
