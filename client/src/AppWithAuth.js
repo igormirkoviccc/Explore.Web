@@ -16,6 +16,7 @@ import NewCanvass from './pages/Canvass/New';
 import ShowCanvass from './pages/Canvass/Show';
 import DrawerIS from "./components/DrawerIS";
 import Session from "./pages/Canvass/Session";
+import StatisticsCanvass from './pages/Canvass/Statistics'
 
 
 export default function AppWithAuth() {
@@ -44,6 +45,7 @@ export default function AppWithAuth() {
                        <Route exact path="/istrazivanja/:id/anketa/new" component={NewCanvass} />
                        <Route exact path="/istrazivanja/:id/anketa/show" component={ShowCanvass} />
                        <Route exact path="/istrazivanja/:id/anketa/session" component={Session} />
+                       <Route exact path="/istrazivanja/:id/anketa/statistika" component={StatisticsCanvass} />
                        <Route exact path="/korisnici/" component={ListUsers} />
                        <Route exact path="/korisnici/new" component={() => checkAdmin(NewUser)} />
                        <Route exact path="/korisnici/:id/show" component={ShowUser} />

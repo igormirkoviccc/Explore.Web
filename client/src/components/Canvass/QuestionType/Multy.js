@@ -20,14 +20,13 @@ export default function Multy({initialData, index, getAnswers, setAnswers}) {
             return <FormControlLabel
                 control={
                     <Checkbox
-                        onChange={async (e) =>{
+                        onChange={(e) =>{
                             let array = [...value];
-                            if(array.indexOf(e.target.value) > -1){
-                                array.splice(array.indexOf(e.target.value))
+                            if(value.indexOf(e.target.value) > -1){
+                                value.splice(array.indexOf(e.target.value))
                             }else{
-                                array.push(e.target.value);
+                                value.push(e.target.value);
                             }
-                            setValue(array);
                             let answerArray = [...getAnswers];
                             const foundObj = answerArray.find((answer) => answer.question_id == initialData._id);
                             if(foundObj) {

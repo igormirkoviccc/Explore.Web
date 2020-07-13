@@ -103,4 +103,25 @@ ExplorationRoute.post('/exploration_file', async (req,res) =>{
     });
 });
 
+ExplorationRoute.post('/question_answers', Auth.verifyUserToken, async (req,res) =>{
+    const answers = req.body;
+    answers.forEach(async (answer) => {
+            const question = await Question.findById(answer.question_id);
+            if(question.type == 'SINGLE'){
+                const possibleAnswer = question.possibleAnswers.find((answerObj) => answerObj._id == answer.answer_id)
+                possibleAnswer.checked++;
+                await question.save();
+            }else if(question.type == 'MULTY'){
+                const arrayOfElements = question.possibleAnswers.filter((an) => {
+                    return answer.answer_id.indexOf(an._id.toString()) > -1;
+                });
+                arrayOfElements.map((el) => {
+                    el.checked++;
+                })
+                await question.save();
+            }
+    })
+    res.send({message: "Success"});
+})
+
 module.exports = ExplorationRoute;

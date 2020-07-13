@@ -11,10 +11,8 @@ import {Redirect} from "react-router-dom"
 
 import '../../App.css';
 import toast from "../../utils/toast"
-import * as fs from 'fs';
 
 
-import ActionContainer from "../../components/ActionContainerIS";
 
 const animatedComponents = makeAnimated();
 const useStyles = makeStyles(theme => ({
@@ -61,7 +59,8 @@ export default function New({initialData, showMode}) {
     const [getRedirect, setRedirect] = useState();
     const [getVideos, setVideos] = useState([]);
     const [getAPIInput, setAPIInput] = useState();
-    const [getAuth, setAuth] = useState(localStorage.getItem('role') === 'CLAN');
+    const [isClan, setAuth] = useState(localStorage.getItem('role') === 'CLAN');
+
     const classes = useStyles();
 
     const [getExploration, setExploration] = useState(
@@ -280,14 +279,14 @@ export default function New({initialData, showMode}) {
                 >Nazad
                 </Button>
                 <Button
-                    disabled={getAuth}
+                    disabled={isClan}
                     className={classes.actionButtons}
                     variant="contained"
                     color="primary"
                     onClick={initialData ? updateExploration : postExploration}
                 >Sačuvaj</Button>
                     <Button
-                        disabled={getAuth}
+                        disabled={isClan}
                         className={classes.actionButtons}
                         variant="contained"
                         color="primary"
@@ -302,7 +301,7 @@ export default function New({initialData, showMode}) {
                         {getExploration.questions && getExploration.questions.length ? "Uredi anketu" : "Kreiraj anketu"}
                     </Button>
                     <Button
-                        disabled={!getAuth}
+                        disabled={!isClan}
                         className={classes.actionButtons}
                         variant="contained"
                         color="primary"
@@ -312,11 +311,22 @@ export default function New({initialData, showMode}) {
                     >
                       Popuni anketu
                     </Button>
+                    <Button
+                        disabled={isClan}
+                        className={classes.actionButtons}
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>{
+                            setRedirect(`/istrazivanja/${getExploration._id}/anketa/statistika`)
+                        }}
+                    >
+                        Statistika ankete
+                    </Button>
                 </Paper>
             <Grid container spacing={3}>
                 <Grid item xl={12} md={12} sm={12} lg={12}>
                     <TextField
-                        disabled={getAuth}
+                        disabled={isClan}
                         label={"Naziv"}
                         onChange={(e) => setExploration({...getExploration, name: e.target.value})}
                         value={getExploration.name}
@@ -325,7 +335,7 @@ export default function New({initialData, showMode}) {
                 <Grid item xl={12} md={12} sm={12} lg={12}>
                     <InputLabel>Kordinator</InputLabel>
                     <Select
-                        isDisabled={getAuth}
+                        isDisabled={isClan}
                         formatGroupLabel={formatGroupLabel}
                         components={animatedComponents}
                         options={makeOptionsForUsers}
@@ -336,7 +346,7 @@ export default function New({initialData, showMode}) {
                 <Grid item xl={12} md={12} sm={12} lg={12}>
                     <InputLabel>Učesnici</InputLabel>
                     <Select
-                        isDisabled={getAuth}
+                        isDisabled={isClan}
                         formatGroupLabel={formatGroupLabel}
                         components={animatedComponents}
                         options={makeOptionsForUsers}
@@ -349,7 +359,7 @@ export default function New({initialData, showMode}) {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <Grid item xl={12} md={12} sm={12} lg={12}>
                         <KeyboardDatePicker
-                            disabled={getAuth}
+                            disabled={isClan}
                             fullWidth
                             label="Begin date"
                             allowKeyboardControl={true}
@@ -362,7 +372,7 @@ export default function New({initialData, showMode}) {
                     </Grid>
                     <Grid item xl={12} md={12} sm={12} lg={12}>
                         <KeyboardDatePicker
-                            disabled={getAuth}
+                            disabled={isClan}
                             fullWidth
                             label="End date"
                             allowKeyboardControl={true}
