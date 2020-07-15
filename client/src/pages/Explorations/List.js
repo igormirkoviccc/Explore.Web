@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import MaterialTable from 'material-table'
 import {Redirect} from "react-router-dom"
 import {formatDateTime} from "../../utils"
-import { Add } from "@material-ui/icons"
 import toast from "../../utils/toast"
 
 
@@ -53,9 +52,6 @@ function List() {
                 {title: "Datum pocetka", field: "beginDate", render: (rowData)=> <span>{formatDateTime(rowData.beginDate)}</span>},
                 {title: "Datum kraja", field: "endDate", render: (rowData)=> <span>{formatDateTime(rowData.endDate)}</span>}
             ]}
-            icons={{
-                Add: props => <div><Add {...props} /></div>
-            }}
             actions={[
                 rowData =>({
                     icon: "visibility",
@@ -71,23 +67,25 @@ function List() {
                         deleteExploration(rowData._id)
                     }
                 }),
-                rowData =>({
+                {
                     icon: "add",
                     tooltip: "Dodaj istraživanje",
                     isFreeAction: true,
                     onClick: () => setRedirect(`/istrazivanja/new`)
-                }),
+                },
             ]}
-            data={getExplorations}
             options={{
                 detailPanelColumnAlignment: "right",
+                exportButton: true,
+                exportAllData: true,
+                exportDelimiter: ";"
             }}
             localization={{
                 header: {
                     actions: ""
                 }
             }}
-
+            data={getExplorations}
         />
     )
 }

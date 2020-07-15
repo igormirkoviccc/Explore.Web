@@ -83,11 +83,12 @@ function List() {
                         deleteExploration(rowData._id)
                     }
                 }),
-                rowData => ({
+                {
                     icon: 'add',
                     tooltip: 'Dodaj korisnika',
+                    isFreeAction: true,
                     onClick: ()=> setRedirect('/korisnici/new')
-                })
+                }
             ]}
             data={getUsers}
             localization={{
