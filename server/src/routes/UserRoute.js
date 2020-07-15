@@ -21,7 +21,7 @@ UserRoute.post('/login', async (req, res) =>{
         const user = await User.findByCredentials(req.body.email, req.body.password);
         res.send({token: await user.generateAuthToken(), id: user._id, role: user.role});
     }catch (e) {
-        res.status(400).send({error: "Login failed"});
+        res.status(400).send({error: "Neuspešno logovanje"});
     }
 })
 

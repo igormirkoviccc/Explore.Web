@@ -74,7 +74,10 @@ export default function AddQuestionIS(props) {
             <TextField
                 style={{marginBottom: 20}}
                 label={"Tekst pitanja"}
-                onChange={(e) => setQuestion({...getQuestion, text: e.target.value})}
+                onChange={(e) => {
+                    console.log(e.target.value);
+                    setQuestion({...getQuestion, text: e.target.value})
+                }}
                 value={getQuestion.text}
             />
             <InputLabel>Tip pitanja</InputLabel>

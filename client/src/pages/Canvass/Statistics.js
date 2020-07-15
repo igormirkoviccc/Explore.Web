@@ -48,9 +48,6 @@ export default function CanvasShow({match}) {
         })
     }
 
-
-
-
     return (
         <div style={{width: 400, height: 400, margin: '0 auto', padding: 20}}>
             {renderQuestions()}
