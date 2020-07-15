@@ -68,9 +68,8 @@ UserRoute.post('/edituser', async (req, res) =>{
 
 UserRoute.get('/usersdelete/:id', Auth.verifyUserToken, Auth.verifyAdmin, async (req,res) =>{
     const exploration = await Exploration.find({coordinator: req.params.id});
-    if(exploration){
-        res.send({err: "Remove relations."})
-        throw new Error("Remove relations.")
+    if(exploration && exploration.length){
+        return res.status(400).json({'message': 'Korisnik je koordinator na nekom istraživanju. Ne može biti obrisan.'});
     }
     User.findByIdAndRemove(req.params.id).exec(function(err,docs){
         if(err){

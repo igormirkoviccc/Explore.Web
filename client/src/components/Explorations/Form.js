@@ -60,7 +60,7 @@ export default function New({initialData, showMode}) {
     const [getVideos, setVideos] = useState([]);
     const [getAPIInput, setAPIInput] = useState();
     const [isClan, setAuth] = useState(localStorage.getItem('role') === 'CLAN');
-
+    const [error, setError] = useState(false);
     const classes = useStyles();
 
     const [getExploration, setExploration] = useState(
@@ -123,6 +123,17 @@ export default function New({initialData, showMode}) {
         const exploration = {
             exploration: getExploration
         }
+
+        if(!getExploration.coordinator){
+            toast.error("Koordinator na istraživanju je neophodan.")
+            return
+        }
+
+        if(!getExploration.name){
+            toast.error("Ime istraživanja je neophodno.")
+            return
+        }
+
         fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/addexploration`, {
             method: 'POST',
             body: JSON.stringify(exploration),
@@ -144,6 +155,17 @@ export default function New({initialData, showMode}) {
         const exploration = {
             exploration: getExploration
         }
+
+        if(!getExploration.coordinator){
+            toast.error("Koordinator na istraživanju je neophodan.")
+            return
+        }
+
+        if(!getExploration.name){
+            toast.error("Ime istraživanja je neophodno.")
+            return
+        }
+
         fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/editexploration`, {
             method: 'POST',
             body: JSON.stringify(exploration),
@@ -271,6 +293,7 @@ export default function New({initialData, showMode}) {
         return <Redirect push to={getRedirect}/>
     }
 
+
     return (
         <Fragment>
                 <Paper className={classes.actionContainer}>
@@ -335,7 +358,7 @@ export default function New({initialData, showMode}) {
                     />
                 </Grid>
                 <Grid item xl={12} md={12} sm={12} lg={12}>
-                    <InputLabel>Kordinator</InputLabel>
+                    <InputLabel>Koordinator</InputLabel>
                     <Select
                         isDisabled={isClan}
                         formatGroupLabel={formatGroupLabel}

@@ -3,10 +3,13 @@ import MaterialTable from 'material-table'
 import {Redirect} from 'react-router-dom'
 import {formatDateTime} from "../../utils"
 import toast from "../../utils/toast";
+import ModalIS from "../../components/ModalIS";
 
 function List() {
     const [getUsers, setUsers] = useState();
     const [getRedirect, setRedirect] = useState();
+    const [deleteModal, setDeleteModal] = useState();
+    const [deletedItem, setDeleteItem] = useState();
 
     const fetchUsers = () =>{
         fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/users`, {
@@ -25,8 +28,8 @@ function List() {
             })
     }
 
-    const deleteExploration = (id) =>{
-        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/usersdelete/` + id, {
+    const deleteUser = () =>{
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:8000/usersdelete/` + deletedItem, {
             headers: {
                 'x-access-token': localStorage.getItem('auth_token')
             }
@@ -35,18 +38,16 @@ function List() {
                 if(res.status != 200){
                     res = await res.json();
                     toast.error(res.message)
-                    return;
                 }else{
-                    return res.json();
+                    res = await res.json();
+                    toast.success("Uspešno obrisano")
+                    fetchUsers()
                 }
             })
-            .then((res) =>{
-                if(res && res.err){
-                    toast.error("Korisnik je koordinator na nekom istraživanju. Ne može biti obrisan.")
-                }
-            })
-            .then(() => fetchUsers())
-            .catch(err => toast.error(err))
+    }
+
+    const handleModal = () =>{
+        setDeleteModal(false)
     }
 
     useEffect(() =>{
@@ -59,6 +60,13 @@ function List() {
     }
 
     return (
+        <>
+            {deleteModal &&
+            <ModalIS
+                action={deleteUser}
+                handleOpen={handleModal}
+            />
+            }
         <MaterialTable
             title={"Korisici"}
             columns={[
@@ -80,7 +88,9 @@ function List() {
                     icon: 'delete',
                     tooltip: 'Obriši korisnika',
                     onClick: () => {
-                        deleteExploration(rowData._id)
+                        setDeleteModal(true);
+                        setDeleteItem(rowData._id)
+                        // deleteUser(rowData._id)
                     }
                 }),
                 {
@@ -98,6 +108,7 @@ function List() {
             }}
 
         />
+        </>
     )
 }
 

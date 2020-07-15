@@ -50,15 +50,7 @@ ExplorationRoute.post('/editexploration', Auth.verifyUserToken, Auth.verifyModer
      })
 })
 
-ExplorationRoute.get('/explorationsdelete/:id', async (req,res) =>{
-    const exploration = await Exploration.findById(req.params.id);
-
-    const user = await User.findById(exploration.coordinator);
-    if(user){
-        res.status(500).send('Remove relations!')
-        throw new Error("Remove relations");
-    }
-
+ExplorationRoute.get('/explorationsdelete/:id', Auth.verifyUserToken, Auth.verifyAdmin, async (req,res) =>{
     Exploration.findByIdAndRemove(req.params.id).exec(function(err,docs){
         if(err){
             res.send(err);
