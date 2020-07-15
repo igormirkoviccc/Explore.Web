@@ -92,7 +92,9 @@ export default function New({initialData, showMode}) {
         const coordinator = getUsers.find((user) => {
             return user._id == value.value
         });
-        setExploration({...getExploration, coordinator: coordinator._id})
+        let participants = [];
+        participants.push(coordinator._id)
+        setExploration({...getExploration, coordinator: coordinator._id, participants})
     }
 
     const onParticipantsChange = (values) => {
